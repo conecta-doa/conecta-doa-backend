@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
@@ -8,7 +9,7 @@ namespace Conecta.Doa.Application.Presentation.Configurations;
 
 public static class SwaggerConfig
 {
-    public static WebApplicationBuilder AddSwaggerConfiguration(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddSwaggerConfiguration(this WebApplicationBuilder builder, IConfiguration configuration)
     {
         builder.Services.AddApiVersioning(options =>
         {
@@ -26,14 +27,23 @@ public static class SwaggerConfig
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(s =>
         {
-            s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            s.AddSecurityDefinition("Keycloack", new OpenApiSecurityScheme
             {
-                Description = "Insira o token JWT desta maneira: Bearer {seu token}",
-                Name = "Authorization",
-                Scheme = "Bearer",
-                BearerFormat = "JWT",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new OpenApiOAuthFlows
+                {
+                    AuthorizationCode = new OpenApiOAuthFlow
+                    {
+                        AuthorizationUrl = new Uri(configuration["Keycloack:AuthenticationUrl"]!),
+                        TokenUrl = new Uri(configuration["Keycloack:TokenUrl"]!),
+                        Scopes = new Dictionary<string, string>
+                        {
+                            ["openid"] = "OIDC",
+                            ["profile"] = "Perfil",
+                            ["email"] = "E-mail"
+                        }
+                    }
+                }
             });
 
             s.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -44,10 +54,10 @@ public static class SwaggerConfig
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
+                            Id = "Keycloack"
                         }
                     },
-                    new string[] { }
+                    new[] { "openid", "profile", "email"}
                 }
             });
         });
@@ -55,13 +65,16 @@ public static class SwaggerConfig
         return builder;
     }
 
-    public static WebApplication UseSwaggerConfiguration(this WebApplication app)
+    public static WebApplication UseSwaggerConfiguration(this WebApplication app, IConfiguration configuration)
     {
         var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
 
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
+            options.OAuthUsePkce();
+            options.OAuthClientId(configuration["Keycloack:SwaggerClientId"]);
+            options.OAuthScopes("openid", "profile", "email");
             foreach (var description in provider.ApiVersionDescriptions)
             {
                 options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", $"ConectaDoa API {description.GroupName}");

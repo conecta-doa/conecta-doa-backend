@@ -16,6 +16,8 @@ public class Donator : Entity
         Document = document;
         Email = email;
         Donations = donations;
+
+        Validate();
     }
 
     public bool HasDonations() => Donations.Count != 0;
@@ -28,5 +30,11 @@ public class Donator : Entity
         Donations.Add(donation);
     }
 
-    // Adicionar mais comportamentos
+    //TODO Adicionar mais comportamentos
+
+    public void Validate()
+    {
+        Validations.ValidateIfNull(FullName, "O campo Nome Completo não pode estar fazio");
+        Validations.ValidateIfNull(Email, "O campo Email não pode estar fazio");
+    }
 }

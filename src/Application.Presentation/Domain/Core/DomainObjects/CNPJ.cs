@@ -6,7 +6,12 @@ public sealed record CNPJ
 {
     public string Number { get; }
 
-    private CNPJ(string number) => Number = number;
+    private CNPJ(string number)
+    {
+        IsValid(number);
+        
+        Number = number;
+    }
 
     /// <summary>
     /// Factory method that validates and creates a CNPJ.
