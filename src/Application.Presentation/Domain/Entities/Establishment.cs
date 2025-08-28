@@ -22,9 +22,19 @@ public class Establishment : Entity
         Address = address;
         Phone = phone;
         CompamyEmail = companyEmail;
+
+        Validate();
     }
 
     public bool HasDonations() => Donations.Count != 0;
 
     // Adicionar mais comportamentos
+    public void Validate()
+    {
+        Validations.ValidateIfNull(CompanyName, "O campo Razão Social não pode estar fazio");
+        Validations.ValidateIfNull(TradingName, "O campo Nome Fantasia não pode estar fazio");
+        Validations.ValidateIfNull(Address, "O campo Endereço não pode estar fazio");
+        Validations.ValidateIfNull(Phone, "O campo Telefone não pode estar fazio");
+        Validations.ValidateIfNull(CompamyEmail, "O campo Email da Instituição não pode estar fazio");
+    }
 }

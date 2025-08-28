@@ -6,7 +6,12 @@ public sealed record CPF
 {
     public string Number { get; }
 
-    private CPF(string number) => Number = number;
+    private CPF(string number)
+    {
+        IsValid(number);
+
+        Number = number;
+    }
 
     /// <summary>
     /// Factory method that validates and creates a CPF.
@@ -14,12 +19,12 @@ public sealed record CPF
     public static CPF Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException("CPF cannot be empty.", nameof(value));
+            return null;
 
         string digitsOnly = OnlyDigits(value);
 
         if (!IsValid(digitsOnly))
-            throw new ArgumentException("Invalid CPF.", nameof(value));
+            return null;
 
         return new CPF(digitsOnly);
     }
