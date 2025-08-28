@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
@@ -9,6 +8,7 @@ namespace Conecta.Doa.Application.Presentation.Configurations;
 
 public static class SwaggerConfig
 {
+    //TODO melhorar esse codigo
     public static WebApplicationBuilder AddSwaggerConfiguration(this WebApplicationBuilder builder, IConfiguration configuration)
     {
         builder.Services.AddApiVersioning(options =>
