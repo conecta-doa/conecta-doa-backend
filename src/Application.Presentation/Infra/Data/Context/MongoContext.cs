@@ -1,8 +1,8 @@
-using Conecta.Doa.Application.Presentation.Data.Configs;
-using Conecta.Doa.Application.Presentation.Data.Interfaces;
+using Conecta.Doa.Application.Presentation.Infra.Data.Configs;
+using Conecta.Doa.Application.Presentation.Infra.Data.Interfaces;
 using MongoDB.Driver;
 
-namespace Conecta.Doa.Application.Presentation.Data.Context;
+namespace Conecta.Doa.Application.Presentation.Infra.Data.Context;
 
 public class MongoContext : IMongoContext
 {

@@ -1,8 +1,8 @@
-using Conecta.Doa.Application.Presentation.Data.Configs;
-using Conecta.Doa.Application.Presentation.Data.Context;
-using Conecta.Doa.Application.Presentation.Data.Interfaces;
-using Conecta.Doa.Application.Presentation.Data.Repositories;
 using Conecta.Doa.Application.Presentation.Domain.Interfaces;
+using Conecta.Doa.Application.Presentation.Infra.Data.Configs;
+using Conecta.Doa.Application.Presentation.Infra.Data.Context;
+using Conecta.Doa.Application.Presentation.Infra.Data.Interfaces;
+using Conecta.Doa.Application.Presentation.Infra.Data.Repositories;
 
 namespace Conecta.Doa.Application.Presentation.Configurations;
 
@@ -17,9 +17,6 @@ public static class MongoDbConfig
 
         // Donator
         builder.Services.AddScoped<IDonatorRepository, DonatorRepository>();
-
-        // User
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
 
         return builder;
     }
