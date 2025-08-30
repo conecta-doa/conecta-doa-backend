@@ -1,6 +1,6 @@
 using MongoDB.Driver;
 
-namespace Conecta.Doa.Application.Presentation.Data.Interfaces;
+namespace Conecta.Doa.Application.Presentation.Infra.Data.Interfaces;
 
 public interface IMongoContext
 {

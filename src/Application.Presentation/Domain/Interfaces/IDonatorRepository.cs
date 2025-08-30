@@ -1,6 +1,6 @@
 using Conecta.Doa.Application.Presentation.Domain.Entities;
 
-namespace Conecta.Doa.Application.Presentation.Data.Interfaces;
+namespace Conecta.Doa.Application.Presentation.Domain.Interfaces;
 
 public interface IDonatorRepository
 {

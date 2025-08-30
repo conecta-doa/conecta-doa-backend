@@ -1,4 +1,4 @@
-namespace Conecta.Doa.Application.Presentation.Data.Configs;
+namespace Conecta.Doa.Application.Presentation.Infra.Data.Configs;
 
 public class MongoDbConfigs
 {

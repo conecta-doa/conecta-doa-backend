@@ -1,8 +1,9 @@
-using Conecta.Doa.Application.Presentation.Data.Interfaces;
 using Conecta.Doa.Application.Presentation.Domain.Entities;
+using Conecta.Doa.Application.Presentation.Domain.Interfaces;
+using Conecta.Doa.Application.Presentation.Infra.Data.Interfaces;
 using MongoDB.Driver;
 
-namespace Conecta.Doa.Application.Presentation.Data.Repositories;
+namespace Conecta.Doa.Application.Presentation.Infra.Data.Repositories;
 
 public class DonatorRepository(IMongoContext context) : IDonatorRepository
 {
