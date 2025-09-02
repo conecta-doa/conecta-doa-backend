@@ -9,7 +9,8 @@ Olá pessoal, espero que estejam bem! Segue um passo a passo de como rodar o pro
 - [5 - Push](#5---push)
 - [6 - Pull Request](#6---criando-a-pull-request)
 - [Tipos de branches](#tipos-de-branches)
-
+- [Requisitos para rodar a aplicação](#requisitos-para-rodar-a-aplicação)
+- [Como rodar o projeto](#como-rodar-o-projeto)
 
 ## Requisitos
 - [Git](https://git-scm.com/downloads)
@@ -124,3 +125,33 @@ git push origin nome-da-sua-branch
 - **Padrão de nome:**  
   - `docs/descricao`  
   - Ex.: `docs/update-readme`.
+
+## Requisitos para rodar a aplicação
+- [Git](https://git-scm.com/downloads)
+- [VSCode](https://code.visualstudio.com/download) (ou outra IDE de sua preferência)
+- [.NET 9 SDK](https://dotnet.microsoft.com/pt-br/download/dotnet/9.0)  
+- [.NET 9 Runtime](https://dotnet.microsoft.com/pt-br/download/dotnet/9.0) 
+- [MongoDB](https://www.mongodb.com/try/download/community) (local ou em container Docker)
+
+
+
+## Como rodar o projeto
+
+### 🔹 VSCode
+- Recomendo instalar a extensão **C# Dev Kit**, que facilita o debug diretamente pelo VSCode.  
+- Basta ir em **Run and Debug** (ou usar o atalho `Ctrl + Shift + D`) e rodar a aplicação.
+
+
+### 🔹 .NET CLI
+- Certifique-se de estar no diretório correto do projeto (exemplo: `cd Application.Presentation`).
+- Compile a aplicação:
+   ```bash
+   dotnet build
+   ````
+- Rode a aplicação:
+    ```bash
+    dotnet run --urls "https://localhost:7219"
+    ```
+- Após rodar, a API estará disponível no Swagger: https://localhost:7219/swagger
+
+- Para derrubar a aplicação vá no terminal onde está rondando e aperte Ctrl + C
