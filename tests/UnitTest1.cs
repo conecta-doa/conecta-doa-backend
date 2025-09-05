@@ -1,4 +1,4 @@
-﻿namespace BackEnd.Tests;
+﻿namespace Conecta.Doa.Application.Presentation.Tests;
 
 public class UnitTest1
 {
