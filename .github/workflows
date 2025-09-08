@@ -1,0 +1,123 @@
+name: CI/CD Pipeline                
+on:                                  
+  push:                              
+    branches: [ principal ]          
+  pull_request:                      
+    branches: [ principal ]         
+  workflow_dispatch:                 
+
+concurrency:                        
+  group: ${{ github.workflow }}-${{ github.ref }} 
+  cancel-in-progress: true           
+
+env:                                 
+  DOTNET_VERSION: '9.0.x'            
+  SOLUTION_FILE: 'conecta-doa-backend.sln' 
+  IMAGE_NAME: conecta-doa-backend    
+
+jobs:                                
+
+  versioning:                        
+    runs-on: ubuntu-latest           
+    name:  Versioning             
+    if: github.event_name == 'push' && github.ref == 'refs/heads/principal'
+                                     
+    permissions:
+      contents: write                
+    outputs: 
+      version: ${{ steps.version.outputs.version }} 
+    steps:                           
+      - name: Checkout code
+        uses: actions/checkout@v4    
+        with:
+          fetch-depth: 0            
+
+      - name: Generate version
+        id: version
+        uses: codacy/git-version@2.8.0 
+        with: 
+          release-branch: principal  
+          prefix: v                  
+      
+      - name: Create Git tag
+        env: 
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        run: |                                  
+          echo "::notice:: New version: ${{ steps.version.outputs.version }}"
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git tag -a ${{ steps.version.outputs.version }} -m "Release ${{ steps.version.outputs.version }}"
+          git push origin ${{ steps.version.outputs.version }}
+
+  build-and-test:                  
+    if: always()                     
+    runs-on: ubuntu-latest
+    name:  Build & Test Solution
+    steps:
+      - uses: actions/checkout@v4    
+
+      - name: Setup NuGet cache
+        uses: actions/cache@v3     
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('*/.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Setup .NET ${{ env.DOTNET_VERSION }}
+        uses: actions/setup-dotnet@v4 
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION_FILE }} 
+
+      - name: Build solution
+        run: dotnet build ${{ env.SOLUTION_FILE }} --configuration Release --no-restore
+                                    
+
+      - name: Run tests
+        run: dotnet test ${{ env.SOLUTION_FILE }} --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+                                   
+
+      - name: Publish test results
+        if: always()                 
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results        
+          path: */TestResults//  
+
+      - name: Publish application
+        run: dotnet publish ${{ env.SOLUTION_FILE }} --configuration Release --output ./publish
+                                     
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dotnet-app          
+          path: ./publish/          
+
+  docker-build:                      
+    runs-on: ubuntu-latest
+    needs: build-and-test            
+    name:  Build & Push Docker Image
+    steps:
+      - uses: actions/checkout@v4    
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3 
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3 
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5 
+        with:
+          context: .                      
+          push: true                      
+          tags: |                         
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest  # sempre "latest"
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} # tag imutável pelo SHA do commit
