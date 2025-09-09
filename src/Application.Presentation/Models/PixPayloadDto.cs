@@ -1,18 +1,43 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text;
+using QRCoder;
 
-namespace Conecta.Doa.Application.Presentation.Dto;
+namespace Conecta.Doa.Application.Presentation.Models;
 
 public record PixPayloadDto
 {
-    public string PixKeyReciever { get; set; }
-    public double Value { get; set; }
-    public string Name { get; set; }
-    public string City { get; set; }
-    public string Message { get; set; }
+    [Required(ErrorMessage = "The PixKeyReciever field is required.")]
+    public required string PixKeyReciever { get; init; }
+
+    [Required(ErrorMessage = "The Value field is required.")]
+    public required double Value { get; init; }
+
+    [Required(ErrorMessage = "The Name field is required.")]
+    public required string Name { get; init; }
+
+    [Required(ErrorMessage = "The City field is required.")]
+    public required string City { get; init; }
+    public string? Message { get; set; }
+
+    public string GenerateQrCode()
+    {
+        var payload = GeneratePayload();
+
+        using var qrGenerator = new QRCodeGenerator();
+        using var qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
+
+        using var qrCode = new PngByteQRCode(qrCodeData);
+        var qrBytes = qrCode.GetGraphic(20);
+
+        return Convert.ToBase64String(qrBytes);
+    }
 
     public string GeneratePayload()
     {
         var value = Value.ToString("F2").Replace(',', '.');
+
+        if (Message is null)
+            Message = "Doação via Conecta Doa";
 
         string payload = $"000201" +
                          $"26360014BR.GOV.BCB.PIX0114{PixKeyReciever}" +
@@ -53,6 +78,13 @@ public record PixPayloadDto
             }
         }
 
-        return resultado.ToString("X4"); 
+        return resultado.ToString("X4");
     }
+}
+
+public record PixPayloadRespone
+{
+    public required bool IsSuccess { get; init; }
+    public string? CopyPaste { get; init; }
+    public string? QrCode { get; init; }
 }

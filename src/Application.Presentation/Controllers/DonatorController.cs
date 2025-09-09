@@ -1,5 +1,5 @@
-using Conecta.Doa.Application.Presentation.Dto;
 using Conecta.Doa.Application.Presentation.Interfaces;
+using Conecta.Doa.Application.Presentation.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conecta.Doa.Application.Presentation.Controllers;
@@ -12,14 +12,24 @@ public class DonatorController(IDonatorAppService donatorAppService) : MainContr
     public async Task<IActionResult> CreateQrCodePayment(PixPayloadDto payload)
     {
         if (!ModelState.IsValid)
-            return BadRequest();
+            return BadRequest(new PixPayloadRespone
+            {
+                IsSuccess = false
+            });
+            
+        var respone = await _donatorAppService.CreatePixPayment(payload);
 
-        (string qrCodeResponse, string copyPasteCode) = _donatorAppService.CreatePixPayment(payload);
+        if (respone is null)
+            return BadRequest(new PixPayloadRespone
+            {
+                IsSuccess = false
+            });
 
-        return Ok(new
+        return Ok(new PixPayloadRespone
         {
-            QrCode = qrCodeResponse,
-            CopyPaste = copyPasteCode
-        });     
-    }   
+            IsSuccess = true,
+            CopyPaste = respone.CopyPaste,
+            QrCode = respone.QrCode
+        });
+    }
 }
