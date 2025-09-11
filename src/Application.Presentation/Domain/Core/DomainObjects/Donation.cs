@@ -14,7 +14,7 @@ public sealed record Donation
     public int? Quantity { get; }
     public decimal? Amount { get; }
 
-    private Donation(DonationType type, string description, int? quantity, decimal? amount)
+    public Donation(DonationType type, string description, int? quantity, decimal? amount)
     {
         Type = type;
         Description = description;
@@ -53,7 +53,7 @@ public sealed record Donation
     /// <summary>
     /// Factory method for a financial donation.
     /// </summary>
-    public static Donation Financial(decimal amount, string description = null)
+    public static Donation Financial(decimal amount, string? description = null)
     {
         if (amount <= 0)
             throw new ArgumentException("Amount must be greater than zero.", nameof(amount));
