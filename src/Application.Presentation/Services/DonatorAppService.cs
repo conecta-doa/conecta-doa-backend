@@ -11,9 +11,11 @@ public class DonatorAppService : IDonatorAppService
 
         var qrCode = dto.GenerateQrCode();
 
+        //TODO arrumar o nome 
         return new PixPayloadRespone { IsSuccess = true, CopyPaste = copyPaste, QrCode = qrCode };
     }
 
+    //TODO Implementar esse método
     public void Dispose()
     {
         throw new NotImplementedException();
