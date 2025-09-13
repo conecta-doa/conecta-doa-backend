@@ -12,6 +12,6 @@ public class AuthController : ControllerBase
     [HttpGet("me")]
     public IActionResult GetMe()
     {
-        return Ok(User.Claims.ToDictionary(c => c.Type, c => c.Value));
+        return Ok(User.Claims.ToDictionary(c => c.Type, c => c.Value)); //27865757000102
     }
 }
