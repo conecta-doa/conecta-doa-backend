@@ -3,9 +3,9 @@ using Application.Presentation.Dto;
 
 namespace Application.Presentation.Interfaces
 {
-    public interface IIBrasilAPI
+    public interface ICorporation_information
     {
-        // O método deve ser chamado 'GetAsync' e retornar a classe DTO correta
+        
         Task<DataInstitution> GetAsync(string cnpj);
     }
 }

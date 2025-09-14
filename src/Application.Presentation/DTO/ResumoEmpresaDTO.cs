@@ -1,12 +1,10 @@
 public class ResumoEmpresaDTO
 {
-    public string Cnpj { get; set; } //teste
-    public string RazaoSocial { get; set; }
-    public string NomeFantasia { get; set; }
-    public string Cep { get; set; }
-    public string SituacaoCadastral { get; set; }
-    public string DataAbertura { get; set; }
-    public string Bairro { get; set; }
-    public string Municipio { get; set; }
-    public string Uf { get; set; }
+ public string Cnpj { get; set; }
+    public string LegalName { get; set; }
+    public string TradeName { get; set; }
+    public string PostalCode { get; set; }
+    public string RegistrationStatus { get; set; }
+    public string OpeningDate { get; set; }
+
 }
