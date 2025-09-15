@@ -1,4 +1,4 @@
-public class ResumoEmpresaDTO
+public class CompanySummaryDTO
 {
  public string Cnpj { get; set; }
     public string LegalName { get; set; }

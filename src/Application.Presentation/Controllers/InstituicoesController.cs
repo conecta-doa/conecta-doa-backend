@@ -30,14 +30,14 @@ namespace Application.Presentation.Controllers
             }
             
             
-            var resumo = new ResumoEmpresaDTO
+            var resumo = new CompanySummaryDTO
             {
                 Cnpj = dadosCompletos.Cnpj,
-                LegalName = dadosCompletos.LegalName,
-                TradeName = dadosCompletos.TradeName, 
-                PostalCode  = dadosCompletos.PostalCode ,
-                RegistrationStatus  = dadosCompletos.RegistrationStatus,
-                OpeningDate  = dadosCompletos.OpeningDate,
+                LegalName = dadosCompletos.RazaoSocial,
+                TradeName = dadosCompletos.NomeFantasia, 
+                PostalCode  = dadosCompletos.Cep  ,
+                RegistrationStatus  = dadosCompletos.SituacaoCadastral,
+                OpeningDate  = dadosCompletos.DataAbertura,
             };
 
           
