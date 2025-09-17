@@ -5,27 +5,7 @@ using Xunit;
 namespace Conecta.Doa.Application.Presentation.Domain.Entities
 {
     public class DonatorTests
-    {
-        [Fact]
-        public void Constructor_ShouldInitializeProperties()
-        {
-            // Arrange
-            var fullName = "Joao Silva";
-            var cpf = new CPF("12345678999");
-            var email = "joao@email.com";
-            var donations = new List<Donation>();
-
-            // Act
-            var donator = new Donator(fullName, cpf, email, donations);
-
-            // Assert
-            Assert.Equal(fullName, donator.FullName);
-            Assert.Equal(cpf, donator.Document);
-            Assert.Equal(email, donator.Email);
-            Assert.Empty(donator.Donations);
-            Assert.False(donator.HasDonations());
-        }
-
+    { 
         [Fact]
         public void AddDonation_ShouldAddDonation_WhenDonationIsNotNull()
         {

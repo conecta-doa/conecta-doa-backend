@@ -22,7 +22,7 @@ public class Donator : Entity
 
     public bool HasDonations() => Donations.Count != 0;
 
-    public void AddDonations(Donation? donation)
+    public void AddDonations(Donation donation)
     {
         if (donation == null)
             return;

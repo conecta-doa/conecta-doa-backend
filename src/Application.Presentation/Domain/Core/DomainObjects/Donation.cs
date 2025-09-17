@@ -53,7 +53,7 @@ public sealed record Donation
     /// <summary>
     /// Factory method for a financial donation.
     /// </summary>
-    public static Donation Financial(decimal amount, string? description = null)
+    public static Donation Financial(decimal amount, string? description)
     {
         if (amount <= 0)
             throw new ArgumentException("Amount must be greater than zero.", nameof(amount));
