@@ -6,7 +6,7 @@ public sealed record CPF
 {
     public string Number { get; }
 
-    private CPF(string number)
+    public CPF(string number)
     {
         IsValid(number);
 
