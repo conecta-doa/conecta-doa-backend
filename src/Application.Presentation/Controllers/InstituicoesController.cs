@@ -1,46 +1,48 @@
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
-using Application.Presentation.Dto;
+using Conecta.Doa.Application.Presentation.Infra.Models;
 using Application.Presentation.Interfaces;
 using Conecta.Doa.Application.Presentation.Controllers;
+using Application.Presentation.Domain.Enums; // Adicione este using para o seu enum
 
-namespace Application.Presentation.Controllers
+namespace Conecta.Doa.Application.Presentation.Controllers
 {
-    [Route("api/Document")]
-    public class InstituicoesController : MainController
+    [Route("api/establishment")]
+    public class EstablishmentController : MainController
     {
-        private readonly ICorporation_information _brasilApiService;
+        private readonly ICompanyLookupService _institutionApiService;
 
-        public InstituicoesController(ICorporation_information brasilApiService)
+        public EstablishmentController(ICompanyLookupService brasilApiService)
         {
-            _brasilApiService = brasilApiService;
+            _institutionApiService = brasilApiService;
         }
 
-        [HttpGet("Check/Company/{cnpj}")]
-        public async Task<IActionResult> CheckInstituicoes([FromRoute] string cnpj)
+        [HttpGet("check/{document}")]
+        public async Task<IActionResult> CheckEstablishment( string document)
         {
-            
-            var dadosCompletos = await _brasilApiService.GetAsync(cnpj);
+            var DataComplete = await _institutionApiService.GetAsync(document);
 
-           
-            if (dadosCompletos == null)
+            if (DataComplete == null)
             {
-               
                 return NotFound("CNPJ não encontrado");
             }
             
-            
-            var resumo = new CompanySummaryDTO
-            {
-                Cnpj = dadosCompletos.Cnpj,
-                LegalName = dadosCompletos.RazaoSocial,
-                TradeName = dadosCompletos.NomeFantasia, 
-                PostalCode  = dadosCompletos.Cep  ,
-                RegistrationStatus  = dadosCompletos.SituacaoCadastral,
-                OpeningDate  = dadosCompletos.DataAbertura,
-            };
+           
+            //EEstablishmentRegistrationStatus situacao = EEstablishmentRegistrationStatus.Unknown; // Valor padrão
 
-          
+
+            var resumo = new CompanyValidation
+            {
+                Cnpj = DataComplete.Cnpj,
+                LegalName = DataComplete.LegalName,
+                TradeName = DataComplete.TradeName, 
+                PostalCode = DataComplete.PostalCode,
+              RegistrationStatus = DataComplete.RegistrationStatus,
+                
+                OpeningDate = DataComplete.OpeningDate,
+            };
+            
             return Ok(resumo);
         }
     }

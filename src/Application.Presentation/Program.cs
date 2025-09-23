@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 
-builder.Services.AddHttpClient<ICorporation_information, CnpjService>(client =>
+builder.Services.AddHttpClient<ICompanyLookupService, CompanyLookupService>(client =>
 {
     client.BaseAddress = new Uri("https://brasilapi.com.br/"); 
     client.Timeout = TimeSpan.FromSeconds(30);
