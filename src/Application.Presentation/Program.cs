@@ -1,4 +1,7 @@
+using System;
 using Conecta.Doa.Application.Presentation.Configurations;
+using Application.Presentation.Interfaces;    
+using Application.Presentation.Services;     
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +15,17 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 
+
+builder.Services.AddHttpClient<ICompanyLookupService, CompanyLookupService>(client =>
+{
+    client.BaseAddress = new Uri("https://brasilapi.com.br/"); 
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
+
 var app = builder.Build();
 
-app.UseCors();
+app.UseCors(); 
+
 app.UseSwaggerConfiguration(builder.Configuration);
 
 if (app.Environment.IsDevelopment())
