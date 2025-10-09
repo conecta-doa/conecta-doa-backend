@@ -1,12 +1,21 @@
-namespace Application.Presentation.Domain.Enums
-{
+namespace Application.Presentation.Domain.Enums;
+
     public enum EEstablishmentRegistrationStatus
     {
-        Unknown = 0,
-        NULA = 1,
-        ATIVA = 2,
-        SUSPENSA = 3,
-        INAPTA = 4,
-        BAIXADA = 8
+    Unknown = 0, 
+        
+        
+        NULL = 1, 
+        
+        
+        ACTIVE = 2, 
+        
+      
+        SUSPENDED= 3, 
+        
+     
+        UNFIT = 4, 
+        
+     
+        LOWLAND = 8 
     }
-}

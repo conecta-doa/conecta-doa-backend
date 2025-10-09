@@ -1,15 +1,13 @@
-
-
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.Json;
-using Application.Presentation.Service; 
+using Application.Presentation.Service;
 
 using Application.Presentation.Interfaces;
 
-namespace Application.Presentation.Services
-{
-    
+namespace Application.Presentation.Service;
+
+
     public class CompanyLookupService : ICompanyLookupService
     {
         private readonly HttpClient _httpClient;
@@ -19,23 +17,22 @@ namespace Application.Presentation.Services
             _httpClient = httpClient;
         }
 
-       
-      public async Task<CompanyInfoViewModel? >GetAsync(string cnpj)
-{
-    var relativeUrl = $"api/cnpj/v1/{cnpj}";
 
-  
-        HttpResponseMessage response = await _httpClient.GetAsync(relativeUrl);
-        
-        
-        if (!response.IsSuccessStatusCode) return null;
-        
-        var jsonResponse = await response.Content.ReadAsStringAsync();
-        var companyData = JsonSerializer.Deserialize<CompanyInfoViewModel>(jsonResponse);
+        public async Task<CompanyInfoViewModel?> GetAsync(string cnpj)
+        {
+            var relativeUrl = $"api/cnpj/v1/{cnpj}";
 
-        return companyData;
+
+            HttpResponseMessage response = await _httpClient.GetAsync(relativeUrl);
+
+
+            if (!response.IsSuccessStatusCode) return null;
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var companyData = JsonSerializer.Deserialize<CompanyInfoViewModel>(jsonResponse);
+
+            return companyData;
+        }
+
     }
 
-}
-        }
-    

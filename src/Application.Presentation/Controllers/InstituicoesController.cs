@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using Conecta.Doa.Application.Presentation.Infra.Models;
+using Conecta.Doa.Application.Presentation.Domain.Models;
 using Application.Presentation.Interfaces;
 using Conecta.Doa.Application.Presentation.Controllers;
-using Application.Presentation.Domain.Enums; // Adicione este using para o seu enum
+using Application.Presentation.Infra.Enum; // Adicione este using para o seu enum
 
-namespace Conecta.Doa.Application.Presentation.Controllers
-{
+namespace Conecta.Doa.Application.Presentation.Controllers;
+
     [Route("api/establishment")]
     public class EstablishmentController : MainController
     {
@@ -19,7 +19,7 @@ namespace Conecta.Doa.Application.Presentation.Controllers
         }
 
         [HttpGet("check/{document}")]
-        public async Task<IActionResult> CheckEstablishment( string document)
+        public async Task<IActionResult> CheckEstablishment(string document)
         {
             var DataComplete = await _institutionApiService.GetAsync(document);
 
@@ -27,23 +27,22 @@ namespace Conecta.Doa.Application.Presentation.Controllers
             {
                 return NotFound("CNPJ não encontrado");
             }
-            
-           
-            //EEstablishmentRegistrationStatus situacao = EEstablishmentRegistrationStatus.Unknown; // Valor padrão
+
+
+         
 
 
             var resumo = new CompanyValidation
             {
                 Cnpj = DataComplete.Cnpj,
                 LegalName = DataComplete.LegalName,
-                TradeName = DataComplete.TradeName, 
+                TradeName = DataComplete.TradeName,
                 PostalCode = DataComplete.PostalCode,
-              RegistrationStatus = DataComplete.RegistrationStatus,
-                
+                RegistrationStatus = DataComplete.RegistrationStatus,
+
                 OpeningDate = DataComplete.OpeningDate,
             };
-            
+
             return Ok(resumo);
         }
     }
-}

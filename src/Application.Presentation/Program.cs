@@ -1,7 +1,8 @@
-using System;
+using System.Text.Json.Serialization;
 using Conecta.Doa.Application.Presentation.Configurations;
-using Application.Presentation.Interfaces;    
+using Application.Presentation.Interfaces;
 using Application.Presentation.Services;     
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,12 @@ builder.AddMongoDbConfiguration()
     .AddDependencyInjectionConfiguration()
     .AddAuthenticationConfiguration(builder.Configuration);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+     
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: true));
+    });
 
 builder.Services.AddOpenApi();
 
