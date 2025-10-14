@@ -1,7 +1,9 @@
 using System.Text.Json.Serialization;
 using Conecta.Doa.Application.Presentation.Configurations;
 using Application.Presentation.Interfaces;
-using Application.Presentation.Services;     
+using Application.Presentation.Service;
+using Application.Presentation.Domain.Service;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,22 +17,23 @@ builder.AddMongoDbConfiguration()
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-     
+
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: true));
     });
+builder.Services.AddScoped<InstitutionValidation>();
 
 builder.Services.AddOpenApi();
 
 
 builder.Services.AddHttpClient<ICompanyLookupService, CompanyLookupService>(client =>
 {
-    client.BaseAddress = new Uri("https://brasilapi.com.br/"); 
+    client.BaseAddress = new Uri("https://brasilapi.com.br/");
     client.Timeout = TimeSpan.FromSeconds(30);
 });
 
 var app = builder.Build();
 
-app.UseCors(); 
+app.UseCors();
 
 app.UseSwaggerConfiguration(builder.Configuration);
 

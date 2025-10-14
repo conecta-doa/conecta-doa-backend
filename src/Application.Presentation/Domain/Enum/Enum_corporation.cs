@@ -1,4 +1,4 @@
-namespace Application.Presentation.Infra.Enum;
+namespace Application.Presentation.Domain.Enum;
 
     public enum Enum_corporation
     {

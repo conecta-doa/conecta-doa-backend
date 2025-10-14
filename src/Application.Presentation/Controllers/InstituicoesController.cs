@@ -1,48 +1,33 @@
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
-using Conecta.Doa.Application.Presentation.Domain.Models;
-using Application.Presentation.Interfaces;
-using Conecta.Doa.Application.Presentation.Controllers;
-using Application.Presentation.Infra.Enum; // Adicione este using para o seu enum
+using Application.Presentation.Domain.Service;
+using Application.Presentation.Domain.Models;
 
-namespace Conecta.Doa.Application.Presentation.Controllers;
-
+namespace Conecta.Doa.Application.Presentation.Controllers
+{
     [Route("api/establishment")]
+    [ApiController]
     public class EstablishmentController : MainController
     {
-        private readonly ICompanyLookupService _institutionApiService;
+        private readonly InstitutionValidation _institutionValidation;
 
-        public EstablishmentController(ICompanyLookupService brasilApiService)
+        public EstablishmentController(InstitutionValidation institutionValidation)
         {
-            _institutionApiService = brasilApiService;
+            _institutionValidation = institutionValidation;
         }
 
-        [HttpGet("check/{document}")]
-        public async Task<IActionResult> CheckEstablishment(string document)
+        [HttpGet("check/{cnpj}")]
+        public async Task<IActionResult> CheckEstablishment(string cnpj)
         {
-            var DataComplete = await _institutionApiService.GetAsync(document);
+            if (string.IsNullOrWhiteSpace(cnpj))
+                return BadRequest("CNPJ inválido.");
 
-            if (DataComplete == null)
-            {
-                return NotFound("CNPJ não encontrado");
-            }
+            var company = await _institutionValidation.ValidateCompanyAsync(cnpj);
 
+            if (company == null)
+                return NotFound("Empresa não encontrada ou não está ativa.");
 
-         
-
-
-            var resumo = new CompanyValidation
-            {
-                Cnpj = DataComplete.Cnpj,
-                LegalName = DataComplete.LegalName,
-                TradeName = DataComplete.TradeName,
-                PostalCode = DataComplete.PostalCode,
-                RegistrationStatus = DataComplete.RegistrationStatus,
-
-                OpeningDate = DataComplete.OpeningDate,
-            };
-
-            return Ok(resumo);
+            return Ok(company);
         }
     }
+}

@@ -1,7 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.Json;
-using Application.Presentation.Service;
+
 
 using Application.Presentation.Interfaces;
 
@@ -35,4 +35,3 @@ namespace Application.Presentation.Service;
         }
 
     }
-

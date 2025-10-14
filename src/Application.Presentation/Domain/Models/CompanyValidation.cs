@@ -1,15 +1,30 @@
-using Application.Presentation.Domain.Enums;
-using Application.Presentation.Infra.Enum;
+using System.Text.Json.Serialization;
+using Application.Presentation.Domain.Enum;
 
-namespace Conecta.Doa.Application.Presentation.Domain.Models;
+namespace Application.Presentation.Domain.Models;
 
-    public class CompanyValidation
-    {
-        public string Cnpj { get; init; }
-        public string LegalName { get; init; }
-        public string TradeName { get; init; }
-        public string PostalCode { get; init; }
-        public Enum_corporation RegistrationStatus { get; init; }
-        public string OpeningDate { get; init; }
+public class CompanyValidation
+{
+    
+    [JsonPropertyName("cnpj")]
+    public string Cnpj { get; init; }
 
-    }
+    [JsonPropertyName("razao_social")]
+    public string LegalName { get; init; }
+
+    [JsonPropertyName("nome_fantasia")]
+    public string TradeName { get; init; }
+
+    [JsonPropertyName("cep")]
+    public string PostalCode { get; init; }
+
+    [JsonPropertyName("situacao_cadastral")]
+    public Enum_corporation RegistrationStatus { get; init; }
+
+    [JsonInclude] 
+    [JsonPropertyName("status_mensagem")]
+    public string Mensagem { get; init; } 
+    
+    [JsonPropertyName("data_inicio_atividade")]
+    public DateTime? OpeningDate { get; set; }
+}

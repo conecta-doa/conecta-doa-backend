@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using Application.Presentation.Infra.Enum;
+using Application.Presentation.Domain.Enum;
 
 namespace Application.Presentation.Service;
 
@@ -20,10 +20,10 @@ public class CompanyInfoViewModel
     [JsonPropertyName("situacao_cadastral")]
     public Enum_corporation RegistrationStatus { get; init; }
 
- 
     public bool IsActive => RegistrationStatus == Enum_corporation.ACTIVE;
 
-   
+    [JsonInclude] // 👈 necessário para incluir na serialização
+    [JsonPropertyName("status_mensagem")]
     public string StatusMessage
     {
         get
@@ -33,13 +33,13 @@ public class CompanyInfoViewModel
                 return "Empresa ativa e validada no cadastro da Receita Federal.";
             }
 
-            
+
             string statusString = RegistrationStatus.ToString();
 
-            
+
             string statusFormatado = char.ToUpper(statusString[0]) + statusString.Substring(1).ToLower();
 
-            
+
             return $"A empresa não está ativa. Status atual: {statusFormatado}.";
         }
     }
