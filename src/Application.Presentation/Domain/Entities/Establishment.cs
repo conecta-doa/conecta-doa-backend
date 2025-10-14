@@ -1,5 +1,7 @@
 using Conecta.Doa.Application.Presentation.Domain.Core;
 using Conecta.Doa.Application.Presentation.Domain.Core.DomainObjects;
+using Application.Presentation.Domain.Enum;
+
 
 namespace Conecta.Doa.Application.Presentation.Domain.Entities;
 
@@ -22,6 +24,8 @@ public class Establishment : Entity
         Address = address;
         Phone = phone;
         CompamyEmail = companyEmail;
+          
+        
 
         Validate();
     }
